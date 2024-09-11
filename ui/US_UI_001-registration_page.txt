@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Registration</h2>
+    <form action="submit_registration.php" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" pattern="^[A-Za-z]{6,}$" required title="Username should be at least 6 characters long, contain no numbers or special characters, and not be null.">
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" required title="Password should be at least 8 characters long, contain at least one special character, one number, and one uppercase letter.">
+        
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required title="Confirm Password should match with Password and not be null.">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required title="Email should contain '@' and domain part like 'gmail.com', and should not be null.">
+        
+        <label for="mobileNumber">Mobile Number:</label>
+        <input type="text" id="mobileNumber" name="mobileNumber" pattern="\d{10}" required title="Mobile number should be exactly 10 digits and not be null.">
+        
+        <label for="aadharNumber">Aadhar Number:</label>
+        <input type="text" id="aadharNumber" name="aadharNumber" pattern="\d{12}" required title="Aadhar number should be exactly 12 digits and not be null.">
+        
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

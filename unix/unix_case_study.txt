@@ -1,0 +1,63 @@
+PASSENGER_FILE="passenger_data.csv"
+
+echo "Welcome to the Ticket Management System"
+echo "Are you an admin or a passenger?"
+echo "1. Admin"
+echo "2. Passenger"
+read user_role
+
+if [ "$user_role" -eq 1 ]; then
+    # Admin options
+    echo "Admin Options:"
+    echo "1. Search for a passenger by name"
+    echo "2. Find total price of all tickets"
+    read admin_option
+    
+    if [ "$admin_option" -eq 1 ]; then
+        # Admin searches for a passenger by name
+        echo "Enter the passenger name to search:"
+        read passenger_name
+        echo "Searching for passengers with confirmed bookings..."
+        grep -i "$passenger_name" "$PASSENGER_FILE" | awk -F "|" '$5 == "Confirmed" { print $0 }'
+        
+        if [[ $? -ne 0 ]]; then
+            echo "No confirmed bookings found for passenger: $passenger_name"
+        fi
+    
+    elif [ "$admin_option" -eq 2 ]; then
+        # Admin finds the total price of confirmed tickets
+        total_price=$(awk -F "|" '$5 == "Confirmed" { sum += $6 } END { print sum }' "$PASSENGER_FILE")
+        echo "Total price of all confirmed tickets: $total_price"
+    
+    else
+        echo "Invalid option selected."
+    fi
+
+elif [ "$user_role" -eq 2 ]; then
+    # Passenger options
+    echo "Passenger Options:"
+    echo "1. Search and replace destination"
+    read passenger_option
+    
+    if [ "$passenger_option" -eq 1 ]; then
+        # Passenger searches and replaces destination
+        echo "Enter your name to search your booking:"
+        read passenger_name
+        passenger_entry=$(grep -i "$passenger_name" "$PASSENGER_FILE")
+        
+        if [ -z "$passenger_entry" ]; then
+            echo "No booking found for passenger: $passenger_name"
+        else
+            echo "Booking found: $passenger_entry"
+            echo "Enter the new destination:"
+            read new_destination
+            sed -i "s/\($passenger_name.*\)|[^|]*|\([^|]*\)/\1|$new_destination|/" "$PASSENGER_FILE"
+            echo "Destination updated successfully."
+        fi
+    else
+        echo "Invalid option selected."
+    fi
+
+else
+    echo "Invalid role selected. Please choose either 1 for Admin or 2 for Passenger."
+fi

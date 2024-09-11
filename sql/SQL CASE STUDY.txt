@@ -1,0 +1,75 @@
+1. Create a table for storing passenger data (US_SQL_001)
+
+CREATE TABLE Passenger (
+    PassengerID INT PRIMARY KEY,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Age INT CHECK (Age >= 0),
+    Gender CHAR(1) CHECK (Gender IN ('M', 'F', 'O')),
+    TicketNumber VARCHAR(255) UNIQUE NOT NULL,
+    BoardingDate DATE
+);
+
+
+2. Create a table for storing train data (US_SQL_002)
+
+
+CREATE TABLE Train (
+    TrainID INT PRIMARY KEY,
+    TrainName VARCHAR(255) NOT NULL,
+    StartLocation VARCHAR(255) NOT NULL,
+    EndLocation VARCHAR(255) NOT NULL,
+    Status VARCHAR(50) CHECK (Status IN ('Active', 'Inactive'))
+);
+
+
+3. Create a table for storing booking data (US_SQL_003)
+
+CREATE TABLE Booking (
+    BookingID INT PRIMARY KEY,
+    PassengerID INT,
+    TrainID INT,
+    Price DECIMAL(10, 2),
+    JourneyDate DATE,
+    FOREIGN KEY (PassengerID) REFERENCES Passenger(PassengerID),
+    FOREIGN KEY (TrainID) REFERENCES Train(TrainID)
+);
+
+
+4. Add a column to the passenger table for seat number (US_SQL_004)
+
+
+ALTER TABLE Passenger
+ADD SeatNumber VARCHAR(50);
+
+
+5. Find the total number of male passengers (US_SQL_005)
+
+SELECT COUNT(*) AS MalePassengersCount
+FROM Passenger
+WHERE Gender = 'M';
+
+
+
+6. List passengers ordered by last name in descending order (US_SQL_006)
+
+SELECT *
+FROM Passenger
+ORDER BY LastName DESC;
+
+
+7. Display booking information (US_SQL_007)
+
+SELECT 
+    P.FirstName, 
+    P.LastName, 
+    B.TrainID, 
+    T.TrainName, 
+    T.StartLocation, 
+    B.Price
+FROM 
+    Booking B
+JOIN 
+    Passenger P ON B.PassengerID = P.PassengerID
+JOIN 
+    Train T ON B.TrainID = T.TrainID;
